@@ -1,0 +1,309 @@
+Commands (predicates)
+
+To start Prolog in gnu-prolog:
+
+gprolog
+
+To load a database:
+
+[db].
+
+Or:
+
+consult('db.pl').
+
+To list information about the database:
+
+listing.
+listing(male).
+
+| ?- write('Hello World'), nl, write('Let\'s Program').
+Hello World
+Let's Program
+
+yes
+
+Cycling through the rules: type semicolon to keep going, or Enter to get out.
+
+| ?- male(X), female(Y).
+
+X = albert
+Y = albert ? ;
+
+X = albert
+Y = betsy ? ;
+
+% Who is the parent of Bob, who also dances?
+parent(X, bob), dances(X).
+
+Clear screen:
+
+| ?- shell(clear).
+
+(1 ms) yes
+
+
+
+get_grandparent :-
+	parent(X, carl),
+	parent(X, charlie),
+	format('~w ~s grandparent ~n', [X, "is the "]).
+
+~w - transpose variable
+~s - transpose string
+~n - new line
+
+%=============================
+% Axioms and derived facts.
+%=============================
+grandparent(X, Y) :-
+	parent(X, Z),
+	parent(Z, Y).
+
+blushes(X) :- human(X).
+human(derek).
+
+stabs(tybalt, mercutio, sword).
+hates(romeo,X) :- stabs(X, mercutio, sword).
+
+% Anonymous variable: will give True if predicate male() exists, but without listing all the values.
+
+male(_)
+
+%=============================
+% Structure
+%=============================
+% functor(?Term, ?Name, ?Arity)
+
+customer(tom, smith, 20.55).
+customer(sally, smith, 120.55).
+
+% customer(sally, _, Bal).  %anonymous variable (e don't care about it)
+
+get_cust_bal(FName, LName) :-
+	customer(FName, LName, Bal),
+	write(FName), tab(1), % this is 1 space
+	format('~w owes us $~2f ~n', [LName, Bal]).
+
+vertical(line(point(X,Y), point(X, Y2))).
+horizontal(line(point(X,Y), point(X2, Y))).
+
+
+%=============================
+% How to compare values
+%=============================
+
+| ?- alice = alice
+.
+
+yes
+| ?- alice = 'alice'.
+
+yes
+| ?- \+ (alice = albert).
+
+yes
+| ?-
+
+
+
+% | ?- vertical(line(point(5,10), X)).
+
+% X = point(5,_)
+
+
+%==============
+% Trace
+%===============
+
+Facts and rules:
+
+warm_blooded(penguin).
+warm_blooded(human).
+
+produce_milk(penguin).
+produce_milk(human).
+
+have_feathers(penguin).
+have_hair(human).
+
+mammal(X):-
+	warm_blooded(X),
+	produce_milk(X),
+	have_hair(X).
+
+
+
+| ?- trace.
+The debugger will first creep -- showing everything (trace)
+
+yes
+{trace}
+| ?- mammal(human).
+      1    1  Call: mammal(human) ?
+      2    2  Call: warm_blooded(human) ?
+      2    2  Exit: warm_blooded(human) ?
+      3    2  Call: produce_milk(human) ?
+      3    2  Exit: produce_milk(human) ?
+      4    2  Call: have_hair(human) ?
+      4    2  Exit: have_hair(human) ?
+      1    1  Exit: mammal(human) ?
+
+(1 ms) yes
+{trace}
+| ?-
+
+{trace}
+| ?- mammal(penguin).
+      1    1  Call: mammal(penguin) ?
+      2    2  Call: warm_blooded(penguin) ?
+      2    2  Exit: warm_blooded(penguin) ?
+      3    2  Call: produce_milk(penguin) ?
+      3    2  Exit: produce_milk(penguin) ?
+      4    2  Call: have_hair(penguin) ?
+      4    2  Fail: have_hair(penguin) ?
+      1    1  Fail: mammal(penguin) ?
+
+no
+{trace}
+| ?-
+
+% To switch trace off
+
+| ?- notrace.
+The debugger is switched off
+
+yes
+| ?-
+
+
+Mathematical functions:
+X is 2 + 2.
+X = 4
+
+yes
+| ?- 50 > 30.
+
+yes
+| ?- (3*10) >= (50/2).
+
+yes
+| ?- \+ (3 = 10).
+
+yes
+| ?- 5+4 =:= 4+5.
+
+yes
+| ?- 5+4 =\= 4+5.
+
+no
+| ?- 5 > 10 ; 10 < 100.
+
+yes
+| ?- X is mod(7,2).
+
+X = 1
+
+yes
+
+
+| ?- double_digit(1000, Y).
+
+Y = 2000
+
+yes
+| ?- random(0,10, X).
+
+X = 0
+
+yes
+| ?- random(0,10, X).
+
+X = 1
+
+(1 ms) yes
+| ?- random(0,10, X).
+
+X = 7
+
+yes
+| ?- random(0,10, X).
+
+X = 4
+
+yes
+
+
+| ?- between(0,10,X).
+
+X = 0 ? ;
+
+X = 1 ? ;
+
+X = 2 ? ;
+
+X = 3 ? ;
+
+X = 4 ? ;
+
+X = 5 ? ;
+
+X = 6 ? ;
+
+X = 7 ? ;
+
+X = 8 ? ;
+
+X = 9 ? ;
+
+X = 10
+
+(1 ms) yes
+| ?-
+
+
+
+| ?- succ(2,X).
+
+X = 3
+
+yes
+| ?-
+
+| ?- X is abs(-8).
+
+X = 8
+
+yes
+| ?- X is max(10,5).
+
+X = 10
+
+yes
+| ?- X is min(10,5).
+
+X = 5
+
+yes
+| ?- X is round(10.56).
+
+X = 11
+
+yes
+| ?- X is truncate(10.56).
+
+X = 10
+
+yes
+| ?- X is floor(10.56).
+
+X = 10
+
+yes
+| ?- X is ceiling(10.56).
+
+X = 11
+
+yes
+| ?-
+
